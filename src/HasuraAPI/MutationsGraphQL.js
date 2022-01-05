@@ -1,8 +1,8 @@
 import {gql} from '@apollo/client';
 
-export const UpdateTodo = gql`
-    mutation ToggleTodo($id: Int!, $completed: Boolean!) {
-        update_todos(where: {id: {_eq: $id}}, _set: {completed: $done}) {
+export const CompleteTodoMutation = gql`
+    mutation CompleteTodo($id: Int!, $completed: Boolean!) {
+        update_todos(where: {id: {_eq: $id}}, _set: {completed: $completed}) {
             returning {
                 id
                 title
@@ -12,9 +12,21 @@ export const UpdateTodo = gql`
     }
 `;
 
-export const AddTodo = gql`
+export const UpdateTodoMutation = gql`
+    mutation CompleteTodo($id: Int!, $title: String!) {
+        update_todos(where: {id: {_eq: $id}}, _set: {title: $title}) {
+            returning {
+                id
+                title
+                completed
+            }
+        }
+    }
+`;
+
+export const AddTodoMutation = gql`
     mutation AddTodo($title: String!) {
-        insert_todos(objects: {title: $text}) {
+        insert_todos(objects: {title: $title}) {
             returning {
                 id
                 title
@@ -24,8 +36,8 @@ export const AddTodo = gql`
     }
 `;
 
-export const RemoveTodo = gql`
-    mutation DeleteTodo($id: Int!) {
+export const RemoveTodoMutation = gql`
+    mutation RemoveTodo($id: Int!) {
         delete_todos(where: {id: {_eq: $id}}) {
             returning {
                 id
