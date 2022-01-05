@@ -1,7 +1,7 @@
 {
-  "auth-domain": "dev-qaszft5o.us.auth0.com",
-  "auth-client-id": "yqVrCmrGQdD9bxRmDXc5E9OB1pted5Dj",
-  "auth-redirect-uri": "https://vakor03.github.io/TodoApp",
-  "auth-audience": "hasura",
-  "hasura-uri": "https://natural-coral-28.hasura.app/v1/graphql"
+  "auth-domain":"dev-qaszft5o.us.auth0.com",
+  "auth-client-id":"yqVrCmrGQdD9bxRmDXc5E9OB1pted5Dj",
+  "auth-redirect-uri":"http://localhost:3000/TodoApp",
+  "auth-audience":"https://dev-qaszft5o.us.auth0.com/api/v2/",
+  "hasura-uri":"wss://natural-coral-28.hasura.app/v1/graphql"
 }

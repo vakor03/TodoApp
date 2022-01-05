@@ -7,9 +7,9 @@ import config from './config.json';
 
 ReactDOM.render(
     <Auth0Provider
-        domain={config['auth-domain']}
-        clientId={config['auth-clinet-id']}
-        redirectUri={config['auth-redirect-uri']}
+        domain="dev-qaszft5o.us.auth0.com"
+        clientId="yqVrCmrGQdD9bxRmDXc5E9OB1pted5Dj"
+        redirectUri={window.location.origin}
         audience={config['auth-audience']}
     >
         <ApolloWrapper>

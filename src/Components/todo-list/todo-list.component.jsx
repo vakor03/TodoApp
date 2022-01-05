@@ -3,13 +3,11 @@ import TodoForm from "../todo-form/todo-form.component";
 import Todo from "../todo/todo.component";
 import {useMutation, useSubscription} from "@apollo/client";
 import {
-    AddTodoMutation,
-    RemoveTodoMutation,
-    UpdateTodoMutation,
-    CompleteTodoMutation
+    AddTodoMutation, RemoveTodoMutation, UpdateTodoMutation, CompleteTodoMutation
 } from "../../HasuraAPI/MutationsGraphQL";
 import {SubscribeTodo} from "../../HasuraAPI/SubscriptionsGraphQL";
 import {useAuth0} from "@auth0/auth0-react";
+import Spinner from "../spinner/spinner.component";
 
 
 function TodoList() {
@@ -36,11 +34,10 @@ function TodoList() {
 
     const CompleteTodo = (id, completed) => {
         const variables = ({
-            id: id,
-            completed: !completed,
+            id: id, completed: !completed,
         });
 
-        completeTodo({ variables });
+        completeTodo({variables});
     };
 
     const RemoveTodo = (id) => {
@@ -57,18 +54,23 @@ function TodoList() {
         }
 
         const variables = ({
-            id: id,
-            title: newValue,
+            id: id, title: newValue,
         });
-        updateTodo( {variables});
+        updateTodo({variables});
     };
 
-    if (loading || authLoading){
-        return <p>Loading</p>;
+    if (loading || authLoading) {
+        return (<div>
+            <h1>Wait a second</h1>
+            <Spinner/>
+        </div>);
     }
 
-    if (!isAuthenticated){
-        return <p>You are not authenticated</p>;
+    if (!isAuthenticated) {
+        return (<div>
+            <h1>Please log in to start:</h1>
+            <button onClick={() => loginWithRedirect()} className={"auth-button"}>Log In</button>
+        </div>);
     }
 
     if (error) {
@@ -79,18 +81,15 @@ function TodoList() {
 
         <div>
             <h1>What's the plan for Today?</h1>
-            <TodoForm onSubmit={AddNewTodo}></TodoForm>
-            {data.map((todo) => (
-                <Todo todo={{
-                    id: todo.id,
-                    task: todo.title,
-                    completed: todo.completed,
+            <TodoForm onSubmit={AddNewTodo}/>
+            {data.todos.map((todo) => (<Todo todo={{
+                    id: todo.id, task: todo.title, completed: todo.completed,
                 }}
-                      completeTodo={CompleteTodo}
-                      removeTodo={RemoveTodo}
-                      updateTodo={UpdateTodo}
-                />
-            ))}
+                                             completeTodo={CompleteTodo}
+                                             removeTodo={RemoveTodo}
+                                             updateTodo={UpdateTodo}
+                />))}
+            <button onClick={() => logout()} className={"auth-button"}>Log out</button>
         </div>
 
     )
