@@ -1,112 +1,93 @@
-import React from "react";
+import {React, useState} from "react";
 import TodoForm from "../todo-form/todo-form.component";
 import Todo from "../todo/todo.component";
-import {startFetchMyQuery} from "../../HasuraAPI/GraphQL";
+import {useMutation, useSubscription} from "@apollo/client";
+import {AddTodo, RemoveTodo, UpdateTodo} from "../../HasuraAPI/MutationsGraphQL";
+import {SubscribeTodo} from "../../HasuraAPI/SubscriptionsGraphQL";
+import {useAuth0} from "@auth0/auth0-react";
 
-import {Component} from "react";
 
-class TodoList extends Component {
 
-    constructor() {
-        super();
+function TodoList() {
+    const [todos, setTodos] = useState([]);
+    const [currId, setCurrId] = useState(0);
+    const [updateTodo] = useMutation(UpdateTodo);
+    const [removeTodo] = useMutation(RemoveTodo);
+    const [addTodo, { loading: addTodoLoading }] = useMutation(AddTodo);
+    const { data, loading, error } = useSubscription(SubscribeTodo);
+    const {
+        loginWithRedirect, logout, isAuthenticated, loading: authLoading,
+    } = useAuth0();
 
-        this.state = {
-            todos: [],
-            currentId: 0
-        };
+    const AddNewTodo = (props) => {
+        if (!props.task || /^\s*$/.test(props.text)) {
+            return;
+        }
 
-        this.read();
-    }
-
-    read = () => {
-        startFetchMyQuery("Get", null).then(res => {
-            this.setState({todos: res.todos}, ()=>this.setState({currentId: res.todos.last ? res.todos.last.id + 1 : 1}));
+        const newTodo = ({
+            id: currId,
+            task: props.task,
+            completed: false
         });
 
-    }
+        const newTodos = [newTodo, ...todos];
+        setTodos(newTodos);
+        setCurrId(currId + 1);
+    };
 
-    render() {
-        const todos = this.state.todos;
-        const addTodo = (props) => {
-            if (!props.task || /^\s*$/.test(props.text)) {
-                return;
+    const CompleteTodo = (id, completed) => {
+        const updatedTodos = todos.map(todo => {
+            if (todo.id === id) {
+                todo.completed = !todo.completed
             }
+            return todo;
+        });
+        setTodos(updatedTodos);
+    };
 
-            startFetchMyQuery("AddTodo", props);
-            const newTodo = ({
-                id: this.state.currentId,
-                task: props.task,
-                completed: false
-            });
-            const newTodos = [newTodo, ...todos];
-            this.setState({todos: newTodos});
+    const RemoveTodo = (id) => {
+        let removeTodos = [...todos].filter(todo => todo.id !== id);
+        setTodos(removeTodos);
+    };
 
-            this.setState({currentId: this.state.currentId + 1});
-        };
-
-        const completeTodo = (id, completed) => {
-            startFetchMyQuery("CompleteTodo", {"id": id, "completed": !completed});
-            const updatedTodos = todos.map(todo => {
-                if (todo.id === id) {
-                    todo.completed = !todo.completed
-                }
-                return todo;
-            });
-            this.setState({todos: updatedTodos});
-        };
-
-        const removeTodo = (id) => {
-            startFetchMyQuery("RemoveTodo", id);
-            let removeTodos = [...todos].filter(todo => todo.id !== id);
-            this.setState({todos: removeTodos});
-        };
-
-        const updateTodo = (id, newValue) => {
-            if (!newValue || /^\s*$/.test(newValue.text)) {
-                return;
-            }
-            console.log(newValue);
-            startFetchMyQuery("UpdateTodo", {
-                "id": id,
-                "task": newValue
-            });
-            this.setState({
-                todos: todos.map(todo => {
-                        if (todo.id === id) {
-                            todo.task = newValue;
-                        }
-                        return todo;
+    const UpdateTodo = (id, newValue) => {
+        if (!newValue || /^\s*$/.test(newValue.text)) {
+            return;
+        }
+        setTodos(
+            todos.map(todo => {
+                    if (todo.id === id) {
+                        todo.task = newValue;
                     }
-                )
-            });
-        };
+                    return todo;
+                }
+            )
+        );
+    };
+    return (
 
-        return (
+        <div>
+            <h1>What's the plan for Today?</h1>
+            <TodoForm onSubmit={addTodo}></TodoForm>
+            {todos.map((todo) => (
+                <Todo todo={todo}
+                      completeTodo={CompleteTodo}
+                      removeTodo={RemoveTodo}
+                      updateTodo={UpdateTodo}
+                />
+            ))}
+        </div>
 
-            <div>
-                <h1>What's the plan for Today?</h1>
-                <TodoForm onSubmit={addTodo}></TodoForm>
-                {todos.map((todo) => (
-                    <Todo todo={todo}
-                          completeTodo={completeTodo}
-                          removeTodo={removeTodo}
-                          updateTodo={updateTodo}
-                    />
-                ))}
-                {/*<Todo*/}
-
-                {/*    todo={todos[0]}*/}
-                {/*    completeTodo={completeTodo}*/}
-                {/*    removeTodo={removeTodo}*/}
-                {/*    updateTodo={updateTodo}*/}
-                {/*/>*/}
-
-            </div>
-
-        )
-    }
-
-
+    )
 }
+
+// read = () => {
+//
+//     startFetchMyQuery("Get", null).then(res => {
+//         this.setState({todos: res.todos}, ()=>this.setState({currentId: res.todos.last ? res.todos.last.id + 1 : 1}));
+//     });
+//
+// }
+
 
 export default TodoList;
