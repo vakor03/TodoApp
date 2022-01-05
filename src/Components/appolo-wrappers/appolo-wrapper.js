@@ -11,7 +11,6 @@ function ApolloWrapper({ children }) {
     const { isAuthenticated, getAccessTokenSilently } = useAuth0();
     const [bearerToken, setBearerToken] = useState();
 
-
     useEffect(() => {
         const getToken = async () => {
             const token = isAuthenticated ? await getAccessTokenSilently() : '';
