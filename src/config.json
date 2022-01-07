@@ -1,6 +1,0 @@
-{
-  "auth-domain":"dev-qaszft5o.us.auth0.com",
-  "auth-client-id":"yqVrCmrGQdD9bxRmDXc5E9OB1pted5Dj",
-  "auth-audience":"https://dev-qaszft5o.us.auth0.com/api/v2/",
-  "hasura-uri":"wss://natural-coral-28.hasura.app/v1/graphql"
-}
