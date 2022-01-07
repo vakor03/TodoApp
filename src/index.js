@@ -1,9 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Auth0Provider } from '@auth0/auth0-react';
+import {Auth0Provider} from '@auth0/auth0-react';
 import App from './App';
 import ApolloWrapper from './Components/appolo-wrappers/appolo-wrapper';
 
+
+{
+    console.log(process.env.REACT_APP_AUTH_DOMAIN)
+}
 ReactDOM.render(
     <Auth0Provider
         domain={process.env.REACT_APP_AUTH_DOMAIN}
@@ -12,7 +16,7 @@ ReactDOM.render(
         audience={process.env.REACT_APP_AUTH_AUDIENCE}
     >
         <ApolloWrapper>
-            <App />
+            <App/>
         </ApolloWrapper>
     </Auth0Provider>,
     document.getElementById('root'),
