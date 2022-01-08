@@ -16,7 +16,7 @@ function TodoList() {
     const [updateTodo] = useMutation(UpdateTodoMutation);
     const [removeTodo] = useMutation(RemoveTodoMutation);
     const [completeTodo] = useMutation(CompleteTodoMutation);
-    const [addTodo, { loading: addTodoLoading }] = useMutation(AddTodoMutation);
+    const [addTodo] = useMutation(AddTodoMutation);
     const { data, loading, error } = useSubscription(SubscribeTodo);
     const {
         loginWithRedirect,
@@ -125,10 +125,11 @@ function TodoList() {
 
     return (
         <div>
-            <h1>What's the plan for Today?</h1>
+            <h1>What&apos;s the plan for Today?</h1>
             <TodoForm onSubmit={AddNewTodo} />
             {data.todos.map(todo => (
                 <Todo
+                    key={todo.id}
                     todo={{
                         id: todo.id,
                         task: todo.title,
