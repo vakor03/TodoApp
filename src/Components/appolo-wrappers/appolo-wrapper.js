@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
-    ApolloProvider, concat, ApolloClient, InMemoryCache,
+    ApolloProvider,
+    concat,
+    ApolloClient,
+    InMemoryCache,
 } from '@apollo/client';
 import { useAuth0 } from '@auth0/auth0-react';
 import { setContext } from '@apollo/link-context';
@@ -13,7 +16,9 @@ function ApolloWrapper({ children }) {
     useEffect(() => {
         const getToken = async () => {
             try {
-                const token = isAuthenticated ? await getAccessTokenSilently() : '';
+                const token = isAuthenticated
+                    ? await getAccessTokenSilently()
+                    : '';
                 setBearerToken(token);
             } catch (e) {
                 console.error(e.message);

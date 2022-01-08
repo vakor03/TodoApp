@@ -1,24 +1,32 @@
-import React, {useState} from "react";
-import TodoForm from "../todo-form/todo-form.component";
-import Todo from "../todo/todo.component";
-import {useMutation, useSubscription} from "@apollo/client";
-import {AddTodoMutation, RemoveTodoMutation, UpdateTodoMutation, CompleteTodoMutation} from "../../HasuraAPI/MutationsGraphQL";
-import {SubscribeTodo} from "../../HasuraAPI/SubscriptionsGraphQL";
-import {useAuth0} from "@auth0/auth0-react";
-import Spinner from "../spinner/spinner.component";
-
+import React, { useState } from 'react';
+import TodoForm from '../todo-form/todo-form.component';
+import Todo from '../todo/todo.component';
+import { useMutation, useSubscription } from '@apollo/client';
+import {
+    AddTodoMutation,
+    RemoveTodoMutation,
+    UpdateTodoMutation,
+    CompleteTodoMutation,
+} from '../../HasuraAPI/MutationsGraphQL';
+import { SubscribeTodo } from '../../HasuraAPI/SubscriptionsGraphQL';
+import { useAuth0 } from '@auth0/auth0-react';
+import Spinner from '../spinner/spinner.component';
 
 function TodoList() {
     const [updateTodo] = useMutation(UpdateTodoMutation);
     const [removeTodo] = useMutation(RemoveTodoMutation);
     const [completeTodo] = useMutation(CompleteTodoMutation);
-    const [addTodo, {loading: addTodoLoading}] = useMutation(AddTodoMutation);
-    const {data, loading, error} = useSubscription(SubscribeTodo);
+    const [addTodo, { loading: addTodoLoading }] = useMutation(AddTodoMutation);
+    const { data, loading, error } = useSubscription(SubscribeTodo);
     const {
-        loginWithRedirect, logout, isAuthenticated, loading: authLoading,
+        loginWithRedirect,
+        logout,
+        isAuthenticated,
+        loading: authLoading,
     } = useAuth0();
 
-    const offlineMessage = 'You are currently offline, all functions are disabled!';
+    const offlineMessage =
+        'You are currently offline, all functions are disabled!';
     const [isoffline, setOffline] = useState(false);
 
     function showOfflineMessage() {
@@ -27,13 +35,13 @@ function TodoList() {
 
     window.onoffline = () => {
         setOffline(true);
-    }
+    };
 
     window.ononline = () => {
         setOffline(false);
-    }
+    };
 
-    const AddNewTodo = (props) => {
+    const AddNewTodo = props => {
         if (!props.task || /^\s*$/.test(props.text)) {
             return;
         }
@@ -42,11 +50,11 @@ function TodoList() {
             showOfflineMessage();
             return;
         }
-        const variables = ({
+        const variables = {
             title: props.task,
-        });
+        };
 
-        addTodo({variables});
+        addTodo({ variables });
     };
 
     const CompleteTodo = (id, completed) => {
@@ -54,23 +62,24 @@ function TodoList() {
             showOfflineMessage();
             return;
         }
-        const variables = ({
-            id: id, completed: !completed,
-        });
+        const variables = {
+            id: id,
+            completed: !completed,
+        };
 
-        completeTodo({variables});
+        completeTodo({ variables });
     };
 
-    const RemoveTodo = (id) => {
+    const RemoveTodo = id => {
         if (isoffline) {
             showOfflineMessage();
             return;
         }
-        const variables = ({
+        const variables = {
             id: id,
-        });
+        };
 
-        removeTodo({variables});
+        removeTodo({ variables });
     };
 
     const UpdateTodo = (id, newValue) => {
@@ -81,24 +90,33 @@ function TodoList() {
             showOfflineMessage();
             return;
         }
-        const variables = ({
-            id: id, title: newValue,
-        });
-        updateTodo({variables});
+        const variables = {
+            id: id,
+            title: newValue,
+        };
+        updateTodo({ variables });
     };
 
     if (loading || authLoading) {
-        return (<div>
-            <h1>Wait a second</h1>
-            <Spinner/>
-        </div>);
+        return (
+            <div>
+                <h1>Wait a second</h1>
+                <Spinner />
+            </div>
+        );
     }
 
     if (!isAuthenticated) {
-        return (<div>
-            <h1>Please log in to start:</h1>
-            <button onClick={() => loginWithRedirect()} className={"auth-button"}>Log In</button>
-        </div>);
+        return (
+            <div>
+                <h1>Please log in to start:</h1>
+                <button
+                    onClick={() => loginWithRedirect()}
+                    className={'auth-button'}>
+                    Log In
+                </button>
+            </div>
+        );
     }
 
     if (error) {
@@ -106,21 +124,26 @@ function TodoList() {
     }
 
     return (
-
         <div>
             <h1>What's the plan for Today?</h1>
-            <TodoForm onSubmit={AddNewTodo}/>
-            {data.todos.map((todo) => (<Todo todo={{
-                id: todo.id, task: todo.title, completed: todo.completed,
-            }}
-                                             completeTodo={CompleteTodo}
-                                             removeTodo={RemoveTodo}
-                                             updateTodo={UpdateTodo}
-            />))}
-            <button onClick={() => logout()} className={"auth-button"}>Log out</button>
+            <TodoForm onSubmit={AddNewTodo} />
+            {data.todos.map(todo => (
+                <Todo
+                    todo={{
+                        id: todo.id,
+                        task: todo.title,
+                        completed: todo.completed,
+                    }}
+                    completeTodo={CompleteTodo}
+                    removeTodo={RemoveTodo}
+                    updateTodo={UpdateTodo}
+                />
+            ))}
+            <button onClick={() => logout()} className={'auth-button'}>
+                Log out
+            </button>
         </div>
-
-    )
+    );
 }
 
 export default TodoList;

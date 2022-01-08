@@ -1,128 +1,135 @@
+:root {
+    --h1-text-color: #fff;
+    --body-bg: linear-gradient(
+        90deg,
+        rgba(48, 16, 255, 1) 0%,
+        rgb(100, 178, 255) 100%
+    );
+    --todo-button-bg: linear-gradient(
+        90deg,
+        rgba(93, 12, 255, 1) 0%,
+        rgba(155, 0, 250, 1) 100%
+    );
+    --todo-button-edit-bg: linear-gradient(
+        90deg,
+        rgba(20, 159, 255, 1) 0%,
+        rgba(17, 122, 255, 1) 100%
+    );
+    --todo-row-bg: linear-gradient(
+        90deg,
+        rgb(255, 55, 20) 0%,
+        rgba(255, 84, 17, 1) 100%
+    );
+    --auth-button-bg: linear-gradient(
+        90deg,
+        rgba(93, 12, 255, 1) 0%,
+        rgba(155, 0, 250, 1) 100%
+    );
+    --todoinput-placeholder: #e2e2e2;
+}
+
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
-  'Lucida Sans', Arial, sans-serif;
+    box-sizing: border-box;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+        'Lucida Sans', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  background: linear-gradient(
-          90deg,
-          rgba(48, 16, 255, 1) 0%,
-          rgb(100, 178, 255) 100%
-  );
+    background: var(--body-bg);
 }
+
 .todo-app {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  width: 520px;
-  min-height: 600px;
-  background: #161a2b;
-  text-align: center;
-  margin: 128px auto;
-  border-radius: 10px;
-  padding-bottom: 32px;
+    background: #161a2b;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    margin: 128px auto;
+    min-height: 600px;
+    padding-bottom: 32px;
+    text-align: center;
+    width: 520px;
 }
 
 h1 {
-  margin: 32px 0;
-  color: #fff;
-  font-size: 24px;
+    color: var(--h1-text-color);
+    font-size: 24px;
+    margin: 32px 0;
 }
 
 .complete {
-  text-decoration: line-through;
-  opacity: 0.4;
+    opacity: 0.4;
+    text-decoration: line-through;
 }
 
 .todo-form {
-  margin-bottom: 32px;
+    margin-bottom: 32px;
 }
 
 .todo-input {
-  padding: 14px 32px 14px 16px;
-  border-radius: 4px 0 0 4px;
-  border: 2px solid #5d0cff;
-  outline: none;
-  width: 320px;
-  background: transparent;
-  color: #fff;
+    background: transparent;
+    border: 2px solid #5d0cff;
+    border-radius: 4px 0 0 4px;
+    color: var(--h1-text-color);
+    padding: 14px 32px 14px 16px;
+    width: 320px;
 }
 
 .todo-input::placeholder {
-  color: #e2e2e2;
+    color: var(--todoinput-placeholder);
 }
 
 .todo-button {
-  padding: 16px;
-  border: none;
-  border-radius: 0 4px 4px 0;
-  cursor: pointer;
-  outline: none;
-  background: linear-gradient(
-          90deg,
-          rgba(93, 12, 255, 1) 0%,
-          rgba(155, 0, 250, 1) 100%
-  );
-  color: #fff;
-  text-transform: capitalize;
+    background: var(--todo-button-bg);
+    border-radius: 0 4px 4px 0;
+    color: var(--h1-text-color);
+    cursor: pointer;
+    outline: none;
+    padding: 16px;
+    text-transform: capitalize;
 }
 
 .todo-input.edit {
-  border: 2px solid #149fff;
+    border: 2px solid #149fff;
 }
 
 .todo-button.edit {
-  background: linear-gradient(
-          90deg,
-          rgba(20, 159, 255, 1) 0%,
-          rgba(17, 122, 255, 1) 100%
-  );
-  padding: 16px 22px;
+    padding: 16px 22px;
 }
 
 .todo-container {
-  display: flex;
-  flex-direction: row;
-  position: relative;
+    display: flex;
+    flex-direction: row;
+    position: relative;
 }
 
 .todo-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 4px auto;
-  color: #fff;
-  background: linear-gradient(
-          90deg,
-          rgb(255, 55, 20) 0%,
-          rgba(255, 84, 17, 1) 100%
-  );
+    align-items: center;
+    background: var(--todo-row-bg);
+    border-radius: 5px;
+    color: var(--h1-text-color);
+    display: flex;
+    justify-content: space-between;
+    margin: 4px auto;
 
-  padding: 16px;
-  border-radius: 5px;
-  width: 90%;
+    padding: 16px;
+    width: 90%;
 }
 
 .icons {
-  display: flex;
-  align-items: center;
-  font-size: 24px;
-  cursor: pointer;
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    font-size: 24px;
 }
 
 .auth-button {
-  padding: 16px;
-  border: none;
-  border-radius: 4px ;
-  cursor: pointer;
-  background: linear-gradient(
-          90deg,
-          rgba(93, 12, 255, 1) 0%,
-          rgba(155, 0, 250, 1) 100%
-  );
-  color: #fff;
-  text-transform: capitalize;
+    background: var(--auth-button-bg);
+    border-radius: 4px;
+    color: var(--h1-text-color);
+    cursor: pointer;
+    padding: 16px;
+    text-transform: capitalize;
 }
