@@ -21,7 +21,9 @@ function Todo({ todo, completeTodo, removeTodo, updateTodo }) {
     return edit.id !== todo.id ? (
         <>
             <div className={todo.completed ? 'todo-row complete' : 'todo-row'}>
-                <div key={todo.id} onClick={() => completeTodo(todo.id)}>
+                <div
+                    key={todo.id}
+                    onClick={() => completeTodo(todo.id, todo.completed)}>
                     {todo.task}
                 </div>
                 <div className={'icons'}>

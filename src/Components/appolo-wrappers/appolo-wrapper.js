@@ -12,7 +12,7 @@ import { WebSocketLink } from '@apollo/client/link/ws';
 function ApolloWrapper({ children }) {
     const { isAuthenticated, getAccessTokenSilently } = useAuth0();
     const [bearerToken, setBearerToken] = useState();
-
+    const errors = [];
     useEffect(() => {
         const getToken = async () => {
             try {
@@ -21,6 +21,7 @@ function ApolloWrapper({ children }) {
                     : '';
                 setBearerToken(token);
             } catch (e) {
+                errors.push(e.message);
                 console.error(e.message);
             }
         };
@@ -65,7 +66,11 @@ function ApolloWrapper({ children }) {
         }),
     });
 
-    return <ApolloProvider client={client}>{children}</ApolloProvider>;
+    return (
+        <ApolloProvider client={client} errors={errors}>
+            {children}
+        </ApolloProvider>
+    );
 }
 
 export default ApolloWrapper;

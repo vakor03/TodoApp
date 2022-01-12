@@ -13,10 +13,13 @@ import { useAuth0 } from '@auth0/auth0-react';
 import Spinner from '../spinner/spinner.component';
 
 function TodoList() {
-    const [updateTodo] = useMutation(UpdateTodoMutation);
-    const [removeTodo] = useMutation(RemoveTodoMutation);
-    const [completeTodo] = useMutation(CompleteTodoMutation);
-    const [addTodo] = useMutation(AddTodoMutation);
+    const [updateTodo, { error: updatingError }] =
+        useMutation(UpdateTodoMutation);
+    const [removeTodo, { error: removingError }] =
+        useMutation(RemoveTodoMutation);
+    const [completeTodo, { error: completingError }] =
+        useMutation(CompleteTodoMutation);
+    const [addTodo, { error: addingError }] = useMutation(AddTodoMutation);
     const { data, loading, error } = useSubscription(SubscribeTodo);
     const {
         loginWithRedirect,
@@ -26,8 +29,8 @@ function TodoList() {
     } = useAuth0();
 
     const offlineMessage =
-        'You are currently offline, all functions are disabled!';
-    const [isoffline, setOffline] = useState(false);
+        'You are currently offline or some functions are disabled. Please check your Internet connection and try again';
+    const [isOffline, setOffline] = useState(false);
 
     function showOfflineMessage() {
         alert(offlineMessage);
@@ -46,7 +49,7 @@ function TodoList() {
             return;
         }
 
-        if (isoffline) {
+        if (isOffline) {
             showOfflineMessage();
             return;
         }
@@ -58,7 +61,7 @@ function TodoList() {
     };
 
     const CompleteTodo = (id, completed) => {
-        if (isoffline) {
+        if (isOffline) {
             showOfflineMessage();
             return;
         }
@@ -71,7 +74,7 @@ function TodoList() {
     };
 
     const RemoveTodo = id => {
-        if (isoffline) {
+        if (isOffline) {
             showOfflineMessage();
             return;
         }
@@ -86,7 +89,7 @@ function TodoList() {
         if (!newValue || /^\s*$/.test(newValue.text)) {
             return;
         }
-        if (isoffline) {
+        if (isOffline) {
             showOfflineMessage();
             return;
         }
@@ -119,8 +122,20 @@ function TodoList() {
         );
     }
 
-    if (error) {
-        return <p>Error</p>;
+    if (
+        error ||
+        updatingError ||
+        removingError ||
+        addingError ||
+        completingError
+    ) {
+        return (
+            <div>
+                <h1>Something got wrong</h1>
+                <h1>Please reload the page</h1>
+                <Spinner />
+            </div>
+        );
     }
 
     return (

@@ -127,6 +127,7 @@ h1 {
 
 .auth-button {
     background: var(--auth-button-bg);
+    border: 0 solid #5d0cff;
     border-radius: 4px;
     color: var(--h1-text-color);
     cursor: pointer;
